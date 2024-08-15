@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/taskMenu"
+        android:title="Task"
+        android:icon="@drawable/task" />
+
+    <item
+        android:id="@+id/toDoListMenu"
+        android:title="To Do List"
+        android:icon="@drawable/list"/>
+
+    <item
+        android:id="@+id/scheduleMenu"
+        android:title="Schedule"
+        android:icon="@drawable/schedule" />
+
+    <item
+        android:id="@+id/walletMenu"
+        android:title="Wallet"
+        android:icon="@drawable/wallet" />
+
+</menu>
