@@ -1,4 +1,4 @@
-package com.example.productivemind
+package com.example.studysaver
 
 import org.junit.Test
 

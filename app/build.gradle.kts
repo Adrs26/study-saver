@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.productivemind"
+    namespace = "com.example.studysaver"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.productivemind"
+        applicationId = "com.example.studysaver"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

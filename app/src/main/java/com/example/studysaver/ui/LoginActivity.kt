@@ -1,10 +1,11 @@
-package com.example.productivemind
+package com.example.studysaver.ui
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import com.example.productivemind.databinding.ActivityLoginBinding
+import com.example.studysaver.databinding.ActivityLoginBinding
+import com.example.studysaver.ui.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding

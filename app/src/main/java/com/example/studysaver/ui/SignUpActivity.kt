@@ -1,9 +1,9 @@
-package com.example.productivemind
+package com.example.studysaver.ui
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.productivemind.databinding.ActivitySignUpBinding
+import com.example.studysaver.databinding.ActivitySignUpBinding
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
