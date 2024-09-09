@@ -19,15 +19,15 @@
         android:layout_height="1dp"
         android:background="@color/light_grey"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"/>
-    
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="60dp"
         android:background="@color/white"
         app:menu="@menu/menu_bottom_nav_view"
         app:labelVisibilityMode="labeled"
-        app:itemIconSize="24dp"
+        app:itemIconSize="20dp"
         app:itemIconTint="@color/main_nav_bottom_view"
         app:itemTextColor="@color/main_nav_bottom_view"
         app:itemActiveIndicatorStyle="@color/white"

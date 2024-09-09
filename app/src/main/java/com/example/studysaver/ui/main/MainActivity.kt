@@ -1,6 +1,7 @@
 package com.example.studysaver.ui.main
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -9,23 +10,37 @@ import com.example.studysaver.R
 import com.example.studysaver.ui.main.fragment.TaskFragment
 import com.example.studysaver.ui.main.fragment.WalletFragment
 import com.example.studysaver.databinding.ActivityMainBinding
+import com.example.studysaver.listeners.task.OnCloseButtonClickListener
+import com.example.studysaver.listeners.task.OnDeleteButtonClickListener
+import com.example.studysaver.ui.main.fragment.LibraryFragment
 import com.example.studysaver.viewmodels.MainViewModel
 import com.example.studysaver.viewmodels.MainViewModelFactory
 
-class MainActivity: AppCompatActivity() {
+class MainActivity: AppCompatActivity(), OnDeleteButtonClickListener, OnCloseButtonClickListener {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var mainViewModel: MainViewModel
+    private val homeFragment by lazy { HomeFragment() }
+    private val taskFragment by lazy { TaskFragment() }
+    private val walletFragment by lazy { WalletFragment() }
+    private val libraryFragment by lazy { LibraryFragment() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setupViewBinding()
+        setupViewModel()
+        setupBottomNavigation()
+        setupOnBackPressed()
+    }
+
+    private fun setupViewBinding() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
 
-        val homeFragment = HomeFragment()
-        val taskFragment = TaskFragment()
-        val walletFragment = WalletFragment()
-
+    private fun setupViewModel() {
         val factory = MainViewModelFactory(homeFragment)
-        val mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
+        mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
         mainViewModel.fragment.observe(this) {
             supportFragmentManager.beginTransaction().apply {
@@ -33,28 +48,34 @@ class MainActivity: AppCompatActivity() {
                 commit()
             }
         }
+    }
 
-        binding.bottomNavigationView.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.homeMenu -> {
-                    mainViewModel.changeFragment(homeFragment)
-                    return@setOnItemSelectedListener true
-                }
-                R.id.taskMenu -> {
-                    mainViewModel.changeFragment(taskFragment)
-                    return@setOnItemSelectedListener true
-                }
-                else -> {
-                    mainViewModel.changeFragment(walletFragment)
-                    return@setOnItemSelectedListener true
-                }
+    private fun setupBottomNavigation() {
+        binding.bottomNavigationView.setOnItemSelectedListener { item ->
+            val fragment = when (item.itemId) {
+                R.id.homeMenu -> homeFragment
+                R.id.taskMenu -> taskFragment
+                R.id.eLibraryMenu -> libraryFragment
+                else -> walletFragment
             }
+            mainViewModel.changeFragment(fragment)
+            true
         }
+    }
 
+    private fun setupOnBackPressed() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 finishAffinity()
             }
         })
+    }
+
+    override fun onDeleteButtonClicked() {
+        binding.bottomNavigationView.visibility = View.GONE
+    }
+
+    override fun onCloseButtonClicked() {
+        binding.bottomNavigationView.visibility = View.VISIBLE
     }
 }

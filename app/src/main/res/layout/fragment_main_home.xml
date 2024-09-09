@@ -2,13 +2,13 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/container1"
@@ -53,10 +53,10 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="24dp"
-            app:cardElevation="4dp"
             app:cardCornerRadius="10dp"
             app:cardBackgroundColor="@color/white"
             app:contentPadding="16dp"
+            app:cardElevation="4dp"
             app:layout_constraintTop_toBottomOf="@id/container1">
 
             <LinearLayout
@@ -201,10 +201,10 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="64dp"
-            app:cardElevation="4dp"
             app:cardCornerRadius="10dp"
             app:cardBackgroundColor="@color/white"
             app:contentPadding="16dp"
+            app:cardElevation="4dp"
             app:layout_constraintTop_toBottomOf="@id/taskProgressCardView"
             app:layout_constraintBottom_toBottomOf="parent">
 

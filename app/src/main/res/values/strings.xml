@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Study Saver</string>
+    <string name="selected_date">%1$d-%2$d-%3$d</string>
+    <string name="indonesian_date_format">%1$s, %2$s</string>
 </resources>
