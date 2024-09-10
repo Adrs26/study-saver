@@ -36,7 +36,7 @@ class TaskAdapter(
                 val binding = ItemTaskDoneBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 ItemViewHolderDone(binding)
             }
-            else -> throw IllegalArgumentException("Invalid view type")
+            else -> throw IllegalArgumentException("Invalid View Type")
         }
     }
 

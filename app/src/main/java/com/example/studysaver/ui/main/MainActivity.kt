@@ -56,7 +56,8 @@ class MainActivity: AppCompatActivity(), OnDeleteButtonClickListener, OnCloseBut
                 R.id.homeMenu -> homeFragment
                 R.id.taskMenu -> taskFragment
                 R.id.eLibraryMenu -> libraryFragment
-                else -> walletFragment
+                R.id.walletMenu -> walletFragment
+                else -> throw IllegalArgumentException("Invalid Item Id")
             }
             mainViewModel.changeFragment(fragment)
             true

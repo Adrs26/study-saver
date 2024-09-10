@@ -23,6 +23,7 @@ import com.example.studysaver.databinding.FragmentMainTaskBinding
 import com.example.studysaver.databinding.PopupTaskBinding
 import com.example.studysaver.listeners.task.OnCloseButtonClickListener
 import com.example.studysaver.listeners.task.OnDeleteButtonClickListener
+import com.example.studysaver.utils.models.MenuButtonStyle
 import com.example.studysaver.viewmodels.MainTaskViewModel
 import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
@@ -35,27 +36,23 @@ import java.util.Locale
 
 class TaskFragment : Fragment() {
     private lateinit var binding: FragmentMainTaskBinding
+    private lateinit var popupTaskBinding: PopupTaskBinding
     private lateinit var mainTaskViewModel: MainTaskViewModel
     private lateinit var taskAdapter: TaskAdapter
     private var list: MutableList<Int> = mutableListOf()
     private var deleteListener: OnDeleteButtonClickListener? = null
     private var closeListener: OnCloseButtonClickListener? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentMainTaskBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setupViewModel()
         setupTaskMenuButton()
         setupRecyclerView()
+        setupViewModel()
         setupPopupAddTask()
         setupToolbarIcon()
     }
@@ -76,24 +73,44 @@ class TaskFragment : Fragment() {
         closeListener = null
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    private fun setupTaskMenuButton() {
+        val buttonActive = R.drawable.box_hover_blue
+        val buttonInactive = 0
+        val textActive = R.color.white
+        val textInactive = R.color.sky_blue
+
+        changeButton(MenuButtonStyle(binding.undoneButton, 1, buttonActive, textActive, buttonInactive, textInactive, buttonInactive, textInactive))
+        changeButton(MenuButtonStyle(binding.lateButton, 2, buttonInactive, textInactive, buttonActive, textActive, buttonInactive, textInactive))
+        changeButton(MenuButtonStyle(binding.doneButton, 3, buttonInactive, textInactive, buttonInactive, textInactive, buttonActive, textActive))
+    }
+
+    private fun changeButton(menuButtonStyle: MenuButtonStyle) {
+        menuButtonStyle.button.setOnClickListener {
+            mainTaskViewModel.changeMenuButton(
+                menuButtonStyle.menuId,
+                menuButtonStyle.undoneButton,
+                menuButtonStyle.undoneText,
+                menuButtonStyle.lateButton,
+                menuButtonStyle.lateText,
+                menuButtonStyle.doneButton,
+                menuButtonStyle.doneText)
+        }
+    }
+
+    private fun setupRecyclerView() {
+        taskAdapter = TaskAdapter(requireContext(), list)
+        binding.taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.taskRecyclerView.adapter = taskAdapter
+    }
+
     private fun setupViewModel() {
         mainTaskViewModel = ViewModelProvider(requireActivity())[MainTaskViewModel::class.java]
 
         mainTaskViewModel.menuId.observe(viewLifecycleOwner) {
             when (it) {
-                1 -> {
-                    list = mutableListOf(1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-                    taskAdapter.updateData(list, TaskAdapter.VIEW_TYPE_ONE)
-                }
-                2 -> {
-                    list = mutableListOf(1, 1)
-                    taskAdapter.updateData(list, TaskAdapter.VIEW_TYPE_TWO)
-                }
-                3 -> {
-                    list = mutableListOf(1, 1, 1)
-                    taskAdapter.updateData(list, TaskAdapter.VIEW_TYPE_THREE)
-                }
+                1 -> setupDataRecyclerView(mutableListOf(1, 1, 1, 1, 1, 1, 1, 1, 1, 1), TaskAdapter.VIEW_TYPE_ONE)
+                2 -> setupDataRecyclerView(mutableListOf(1, 1), TaskAdapter.VIEW_TYPE_TWO)
+                3 -> setupDataRecyclerView(mutableListOf(1, 1, 1), TaskAdapter.VIEW_TYPE_THREE)
             }
         }
         mainTaskViewModel.undoneButtonData.observe(viewLifecycleOwner) { (background, textColor) ->
@@ -107,35 +124,17 @@ class TaskFragment : Fragment() {
         }
     }
 
+    private fun setupDataRecyclerView(list: MutableList<Int>, viewType: Int) {
+        this.list = list
+        taskAdapter.updateData(this.list, viewType)
+    }
+
     private fun setupButtonStyle(button: TextView, background: Int, textColor: Int) {
         when (background) {
             0 -> button.background = null
             else -> button.background = ContextCompat.getDrawable(requireContext(), background)
         }
         button.setTextColor(ContextCompat.getColor(requireContext(), textColor))
-    }
-
-    private fun setupTaskMenuButton() {
-        val buttonActive = R.drawable.box_hover_blue
-        val buttonInactive = 0
-        val textActive = R.color.white
-        val textInactive = R.color.sky_blue
-
-        changeButton(binding.undoneButton, 1, buttonActive, textActive, buttonInactive, textInactive, buttonInactive, textInactive)
-        changeButton(binding.lateButton, 2, buttonInactive, textInactive, buttonActive, textActive, buttonInactive, textInactive)
-        changeButton(binding.doneButton, 3, buttonInactive, textInactive, buttonInactive, textInactive, buttonActive, textActive)
-    }
-
-    private fun changeButton(button: TextView, menuId: Int, undoneButton: Int, undoneText: Int, lateButton: Int, lateText: Int, doneButton: Int, doneText: Int) {
-        button.setOnClickListener {
-            mainTaskViewModel.changeMenuButton(menuId, undoneButton, undoneText, lateButton, lateText, doneButton, doneText)
-        }
-    }
-
-    private fun setupRecyclerView() {
-        taskAdapter = TaskAdapter(requireContext(), list)
-        binding.taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.taskRecyclerView.adapter = taskAdapter
     }
 
     private fun setupPopupAddTask() {
@@ -145,23 +144,21 @@ class TaskFragment : Fragment() {
     }
 
     private fun showPopupAddTask() {
-        val binding = PopupTaskBinding.inflate(LayoutInflater.from(requireContext()))
+        popupTaskBinding = PopupTaskBinding.inflate(LayoutInflater.from(requireContext()))
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setView(binding.root)
         val alertDialog = dialogBuilder.create()
 
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        binding.cancelButton.setOnClickListener {
+        popupTaskBinding.cancelButton.setOnClickListener {
             alertDialog.dismiss()
         }
-
-        binding.saveButton.setOnClickListener {
+        popupTaskBinding.saveButton.setOnClickListener {
             alertDialog.dismiss()
         }
-
-        binding.taskDeadline.setOnClickListener {
-            showCalendar(binding.taskDeadline)
+        popupTaskBinding.taskDeadline.setOnClickListener {
+            showCalendar(popupTaskBinding.taskDeadline)
         }
 
         alertDialog.show()
@@ -214,18 +211,22 @@ class TaskFragment : Fragment() {
 
     private fun setupToolbarIcon() {
         binding.deleteIcon.setOnClickListener {
-            showIconDeleteTask(View.VISIBLE, View.GONE, 0)
+            setupDeleteTask(View.VISIBLE, View.GONE, 0)
             deleteListener?.onDeleteButtonClicked()
         }
 
         binding.closeIcon.setOnClickListener {
-            showIconDeleteTask(View.GONE, View.VISIBLE, 1)
+            setupDeleteTask(View.GONE, View.VISIBLE, 1)
             closeListener?.onCloseButtonClicked()
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun showIconDeleteTask(viewOneStatus: Int, viewTwoStatus: Int, listStatus: Int) {
+    private fun setupDeleteTask(viewOneStatus: Int, viewTwoStatus: Int, listStatus: Int) {
+        updateViewVisibilityForDelete(viewOneStatus, viewTwoStatus)
+        updateTaskListStatus(listStatus)
+    }
+
+    private fun updateViewVisibilityForDelete(viewOneStatus: Int, viewTwoStatus: Int) {
         setVisibility(
             binding.deleteForeverIcon to viewOneStatus,
             binding.selectAllIcon to viewOneStatus,
@@ -237,8 +238,11 @@ class TaskFragment : Fragment() {
             binding.doneButton to viewTwoStatus,
             binding.chooseDeleteItemTextView to viewOneStatus
         )
+    }
 
-        list.fill(listStatus)
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateTaskListStatus(status: Int) {
+        list.fill(status)
         taskAdapter.notifyDataSetChanged()
     }
 
