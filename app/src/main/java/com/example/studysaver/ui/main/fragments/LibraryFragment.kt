@@ -1,4 +1,4 @@
-package com.example.studysaver.ui.main.fragment
+package com.example.studysaver.ui.main.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

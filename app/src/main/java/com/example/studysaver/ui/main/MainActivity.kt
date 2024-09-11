@@ -5,20 +5,20 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.studysaver.ui.main.fragment.HomeFragment
 import com.example.studysaver.R
-import com.example.studysaver.ui.main.fragment.TaskFragment
-import com.example.studysaver.ui.main.fragment.WalletFragment
 import com.example.studysaver.databinding.ActivityMainBinding
-import com.example.studysaver.listeners.task.OnCloseButtonClickListener
-import com.example.studysaver.listeners.task.OnDeleteButtonClickListener
-import com.example.studysaver.ui.main.fragment.LibraryFragment
+import com.example.studysaver.ui.main.fragments.HomeFragment
+import com.example.studysaver.ui.main.fragments.LibraryFragment
+import com.example.studysaver.ui.main.fragments.TaskFragment
+import com.example.studysaver.ui.main.fragments.WalletFragment
+import com.example.studysaver.viewmodels.MainTaskViewModel
 import com.example.studysaver.viewmodels.MainViewModel
 import com.example.studysaver.viewmodels.MainViewModelFactory
 
-class MainActivity: AppCompatActivity(), OnDeleteButtonClickListener, OnCloseButtonClickListener {
+class MainActivity: AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var mainTaskViewModel: MainTaskViewModel
     private val homeFragment by lazy { HomeFragment() }
     private val taskFragment by lazy { TaskFragment() }
     private val walletFragment by lazy { WalletFragment() }
@@ -41,11 +41,19 @@ class MainActivity: AppCompatActivity(), OnDeleteButtonClickListener, OnCloseBut
     private fun setupViewModel() {
         val factory = MainViewModelFactory(homeFragment)
         mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
+        mainTaskViewModel = ViewModelProvider(this)[MainTaskViewModel::class.java]
 
         mainViewModel.fragment.observe(this) {
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.flFragment, it)
                 commit()
+            }
+        }
+        mainTaskViewModel.showDeleteTask.observe(this) {
+            if (it) {
+                binding.bottomNavigationView.visibility = View.GONE
+            } else {
+                binding.bottomNavigationView.visibility = View.VISIBLE
             }
         }
     }
@@ -70,13 +78,5 @@ class MainActivity: AppCompatActivity(), OnDeleteButtonClickListener, OnCloseBut
                 finishAffinity()
             }
         })
-    }
-
-    override fun onDeleteButtonClicked() {
-        binding.bottomNavigationView.visibility = View.GONE
-    }
-
-    override fun onCloseButtonClicked() {
-        binding.bottomNavigationView.visibility = View.VISIBLE
     }
 }

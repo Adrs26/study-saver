@@ -10,10 +10,7 @@ import com.example.studysaver.databinding.ItemTaskDoneBinding
 import com.example.studysaver.databinding.ItemTaskLateBinding
 import com.example.studysaver.databinding.ItemTaskUndoneBinding
 
-class TaskAdapter(
-    private val context: Context,
-    private var taskList: List<Int>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TaskAdapter(private val context: Context, private var taskItems: List<Int>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         const val VIEW_TYPE_ONE = 1
         const val VIEW_TYPE_TWO = 2
@@ -41,14 +38,14 @@ class TaskAdapter(
     }
 
     override fun getItemCount(): Int {
-        return taskList.size
+        return taskItems.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            VIEW_TYPE_ONE -> (holder as ItemViewHolderUndone).bind(taskList[position])
-            VIEW_TYPE_TWO -> (holder as ItemViewHolderLate).bind(taskList[position])
-            VIEW_TYPE_THREE -> (holder as ItemViewHolderDone).bind(taskList[position])
+            VIEW_TYPE_ONE -> (holder as ItemViewHolderUndone).bind(taskItems[position])
+            VIEW_TYPE_TWO -> (holder as ItemViewHolderLate).bind(taskItems[position])
+            VIEW_TYPE_THREE -> (holder as ItemViewHolderDone).bind(taskItems[position])
         }
     }
 
@@ -58,7 +55,7 @@ class TaskAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newItemList: List<Int>, newViewType: Int) {
-        taskList = newItemList
+        taskItems = newItemList
         currentViewType = newViewType
         notifyDataSetChanged()
     }

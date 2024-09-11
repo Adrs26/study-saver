@@ -1,70 +1,86 @@
 package com.example.studysaver.viewmodels
 
-import androidx.lifecycle.MediatorLiveData
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.example.studysaver.R
+import com.example.studysaver.adapters.TaskAdapter
+import com.example.studysaver.utils.ConvertDate
 
-class MainTaskViewModel : ViewModel() {
-    val menuId = MutableLiveData<Int>()
+class MainTaskViewModel(application: Application) : AndroidViewModel(application) {
+    val menuId = MutableLiveData<Int>().apply { value = 1 }
+    val undoneButtonStyle = MutableLiveData<Pair<Int, Int>>()
+    val lateButtonStyle = MutableLiveData<Pair<Int, Int>>()
+    val doneButtonStyle = MutableLiveData<Pair<Int, Int>>()
+    val showDeleteTask = MutableLiveData<Boolean>()
 
-    private val undoneButtonColor = MutableLiveData<Int>()
-    private val undoneTextColor = MutableLiveData<Int>()
-    val undoneButtonData = MediatorLiveData<Pair<Int, Int>>().apply {
-        addSource(undoneButtonColor) { background ->
-            val textColor = undoneTextColor.value ?: return@addSource
-            value = background to textColor
-        }
-        addSource(undoneTextColor) { textColor ->
-            val background = undoneButtonColor.value ?: return@addSource
-            value = background to textColor
-        }
-    }
+    val taskTitle = MutableLiveData<String>()
+    val taskDescription = MutableLiveData<String>()
+    val taskDeadline = MutableLiveData<String>()
 
-    private val lateButtonColor = MutableLiveData<Int>()
-    private val lateTextColor = MutableLiveData<Int>()
-    val lateButtonData = MediatorLiveData<Pair<Int, Int>>().apply {
-        addSource(lateButtonColor) { background ->
-            val textColor = lateTextColor.value ?: return@addSource
-            value = background to textColor
-        }
-        addSource(lateTextColor) { textColor ->
-            val background = lateButtonColor.value ?: return@addSource
-            value = background to textColor
-        }
-    }
+    private val undoneTasks = MutableLiveData(mutableListOf(1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+    private val lateTasks = MutableLiveData(mutableListOf(1, 1))
+    private val doneTasks = MutableLiveData(mutableListOf(1, 1, 1))
 
-    private val doneButtonColor = MutableLiveData<Int>()
-    private val doneTextColor = MutableLiveData<Int>()
-    val doneButtonData = MediatorLiveData<Pair<Int, Int>>().apply {
-        addSource(doneButtonColor) { background ->
-            val textColor = doneTextColor.value ?: return@addSource
-            value = background to textColor
-        }
-        addSource(doneTextColor) { textColor ->
-            val background = doneButtonColor.value ?: return@addSource
-            value = background to textColor
-        }
-    }
-
-    init {
-        menuId.value = 1
-    }
-
-    fun changeMenuButton(
-        menuId: Int,
-        undoneButtonColor: Int,
-        undoneTextColor: Int,
-        lateButtonColor: Int,
-        lateTextColor: Int,
-        doneButtonColor: Int,
-        doneTextColor: Int,
-    ) {
+    fun changeMenuButton(menuId: Int) {
         this.menuId.value = menuId
-        this.undoneButtonColor.value = undoneButtonColor
-        this.undoneTextColor.value = undoneTextColor
-        this.lateButtonColor.value = lateButtonColor
-        this.lateTextColor.value = lateTextColor
-        this.doneButtonColor.value = doneButtonColor
-        this.doneTextColor.value = doneTextColor
+        updateButtonStyles(menuId)
+    }
+
+    private fun updateButtonStyles(menuId: Int) {
+        undoneButtonStyle.value = if (menuId == 1) Pair(R.drawable.box_hover_blue, R.color.white) else Pair(0, R.color.sky_blue)
+        lateButtonStyle.value = if (menuId == 2) Pair(R.drawable.box_hover_blue, R.color.white) else Pair(0, R.color.sky_blue)
+        doneButtonStyle.value = if (menuId == 3) Pair(R.drawable.box_hover_blue, R.color.white) else Pair(0, R.color.sky_blue)
+    }
+
+    fun getTaskList(menuId: Int): List<Int> {
+        return when (menuId) {
+            1 -> undoneTasks.value ?: emptyList()
+            2 -> lateTasks.value ?: emptyList()
+            3 -> doneTasks.value ?: emptyList()
+            else -> emptyList()
+        }
+    }
+
+    fun getViewType(menuId: Int): Int {
+        return when (menuId) {
+            1 -> TaskAdapter.VIEW_TYPE_ONE
+            2 -> TaskAdapter.VIEW_TYPE_TWO
+            3 -> TaskAdapter.VIEW_TYPE_THREE
+            else -> TaskAdapter.VIEW_TYPE_ONE
+        }
+    }
+
+    fun changeTaskList(status: Int) {
+        when (menuId.value) {
+            1 -> undoneTasks.value?.fill(status)
+            2 -> lateTasks.value?.fill(status)
+            3 -> doneTasks.value?.fill(status)
+            else -> {}
+        }
+    }
+
+    fun setTaskTitleAndDescription(title: String, description: String) {
+        taskTitle.value = title
+        taskDescription.value = description
+    }
+
+    fun setTaskDeadline(year: Int, month: Int, day: Int) {
+        val context = getApplication<Application>()
+        val selectedDate = context.getString(R.string.selected_date, year, month + 1, day)
+        val indonesianDateFormat = context.getString(
+            R.string.indonesian_date_format,
+            ConvertDate.getDayFromDate(selectedDate),
+            ConvertDate.convertDateToIndonesianFormat(selectedDate)
+        )
+        taskDeadline.value = indonesianDateFormat
+    }
+
+    fun onDeleteTaskClicked() {
+        showDeleteTask.value = true
+    }
+
+    fun onCloseDeleteTaskClicked() {
+        showDeleteTask.value = false
     }
 }
