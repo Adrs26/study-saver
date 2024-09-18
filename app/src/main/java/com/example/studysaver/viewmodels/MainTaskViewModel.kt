@@ -28,9 +28,17 @@ class MainTaskViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun updateButtonStyles(menuId: Int) {
-        undoneButtonStyle.value = if (menuId == 1) Pair(R.drawable.box_hover_blue, R.color.white) else Pair(0, R.color.sky_blue)
-        lateButtonStyle.value = if (menuId == 2) Pair(R.drawable.box_hover_blue, R.color.white) else Pair(0, R.color.sky_blue)
-        doneButtonStyle.value = if (menuId == 3) Pair(R.drawable.box_hover_blue, R.color.white) else Pair(0, R.color.sky_blue)
+        undoneButtonStyle.value = getButtonStyle(menuId, 1)
+        lateButtonStyle.value = getButtonStyle(menuId, 2)
+        doneButtonStyle.value = getButtonStyle(menuId, 3)
+    }
+
+    private fun getButtonStyle(menuId: Int, targetMenuId: Int): Pair<Int, Int> {
+        return if (menuId == targetMenuId) {
+            Pair(R.drawable.box_hover_blue, R.color.white)
+        } else {
+            Pair(0, R.color.sky_blue)
+        }
     }
 
     fun getTaskList(menuId: Int): List<Int> {

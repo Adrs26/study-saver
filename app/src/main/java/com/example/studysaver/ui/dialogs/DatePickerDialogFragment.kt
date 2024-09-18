@@ -1,4 +1,4 @@
-package com.example.studysaver.ui.main.dialogs
+package com.example.studysaver.ui.dialogs
 
 import android.app.DatePickerDialog
 import android.app.Dialog

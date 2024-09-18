@@ -1,4 +1,4 @@
-package com.example.studysaver.ui.main
+package com.example.studysaver.ui
 
 import android.os.Bundle
 import android.view.View
@@ -7,55 +7,39 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.studysaver.R
 import com.example.studysaver.databinding.ActivityMainBinding
-import com.example.studysaver.ui.main.fragments.HomeFragment
-import com.example.studysaver.ui.main.fragments.LibraryFragment
-import com.example.studysaver.ui.main.fragments.TaskFragment
-import com.example.studysaver.ui.main.fragments.WalletFragment
+import com.example.studysaver.ui.fragments.MainHomeFragment
+import com.example.studysaver.ui.fragments.MainLibraryFragment
+import com.example.studysaver.ui.fragments.MainTaskFragment
+import com.example.studysaver.ui.fragments.MainWalletFragment
 import com.example.studysaver.viewmodels.MainTaskViewModel
 import com.example.studysaver.viewmodels.MainViewModel
-import com.example.studysaver.viewmodels.MainViewModelFactory
 
 class MainActivity: AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var mainViewModel: MainViewModel
-    private lateinit var mainTaskViewModel: MainTaskViewModel
-    private val homeFragment by lazy { HomeFragment() }
-    private val taskFragment by lazy { TaskFragment() }
-    private val walletFragment by lazy { WalletFragment() }
-    private val libraryFragment by lazy { LibraryFragment() }
+
+    private val mainViewModel: MainViewModel by lazy {
+        ViewModelProvider(this)[MainViewModel::class.java]
+    }
+    private val mainTaskViewModel: MainTaskViewModel by lazy {
+        ViewModelProvider(this)[MainTaskViewModel::class.java]
+    }
+    private val homeFragment by lazy { MainHomeFragment() }
+    private val taskFragment by lazy { MainTaskFragment() }
+    private val walletFragment by lazy { MainWalletFragment() }
+    private val libraryFragment by lazy { MainLibraryFragment() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setupViewBinding()
-        setupViewModel()
         setupBottomNavigation()
         setupOnBackPressed()
+        setupObservers()
     }
 
     private fun setupViewBinding() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-    }
-
-    private fun setupViewModel() {
-        val factory = MainViewModelFactory(homeFragment)
-        mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
-        mainTaskViewModel = ViewModelProvider(this)[MainTaskViewModel::class.java]
-
-        mainViewModel.fragment.observe(this) {
-            supportFragmentManager.beginTransaction().apply {
-                replace(R.id.flFragment, it)
-                commit()
-            }
-        }
-        mainTaskViewModel.showDeleteTask.observe(this) {
-            if (it) {
-                binding.bottomNavigationView.visibility = View.GONE
-            } else {
-                binding.bottomNavigationView.visibility = View.VISIBLE
-            }
-        }
     }
 
     private fun setupBottomNavigation() {
@@ -78,5 +62,21 @@ class MainActivity: AppCompatActivity() {
                 finishAffinity()
             }
         })
+    }
+
+    private fun setupObservers() {
+        mainViewModel.fragment.observe(this) {
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.flFragment, it)
+                commit()
+            }
+        }
+        mainTaskViewModel.showDeleteTask.observe(this) {
+            if (it) {
+                binding.bottomNavigationView.visibility = View.GONE
+            } else {
+                binding.bottomNavigationView.visibility = View.VISIBLE
+            }
+        }
     }
 }

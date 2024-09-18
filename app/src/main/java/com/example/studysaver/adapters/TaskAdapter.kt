@@ -10,7 +10,10 @@ import com.example.studysaver.databinding.ItemTaskDoneBinding
 import com.example.studysaver.databinding.ItemTaskLateBinding
 import com.example.studysaver.databinding.ItemTaskUndoneBinding
 
-class TaskAdapter(private val context: Context, private var taskItems: List<Int>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TaskAdapter(
+    private val context: Context,
+    private var taskItems: List<Int>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         const val VIEW_TYPE_ONE = 1
         const val VIEW_TYPE_TWO = 2
@@ -20,17 +23,19 @@ class TaskAdapter(private val context: Context, private var taskItems: List<Int>
     private var currentViewType: Int = VIEW_TYPE_ONE
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+
         return when (viewType) {
             VIEW_TYPE_ONE -> {
-                val binding = ItemTaskUndoneBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = ItemTaskUndoneBinding.inflate(inflater, parent, false)
                 ItemViewHolderUndone(binding)
             }
             VIEW_TYPE_TWO -> {
-                val binding = ItemTaskLateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = ItemTaskLateBinding.inflate(inflater, parent, false)
                 ItemViewHolderLate(binding)
             }
             VIEW_TYPE_THREE -> {
-                val binding = ItemTaskDoneBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = ItemTaskDoneBinding.inflate(inflater, parent, false)
                 ItemViewHolderDone(binding)
             }
             else -> throw IllegalArgumentException("Invalid View Type")
@@ -60,19 +65,25 @@ class TaskAdapter(private val context: Context, private var taskItems: List<Int>
         notifyDataSetChanged()
     }
 
-    inner class ItemViewHolderUndone(private val itemBinding: ItemTaskUndoneBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+    inner class ItemViewHolderUndone(
+        private val itemBinding: ItemTaskUndoneBinding
+    ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(data: Int) {
             itemBinding.checkboxTask.visibility = if (data == 0) View.VISIBLE else View.GONE
         }
     }
 
-    inner class ItemViewHolderLate(private val itemBinding: ItemTaskLateBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+    inner class ItemViewHolderLate(
+        private val itemBinding: ItemTaskLateBinding
+    ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(data: Int) {
             itemBinding.checkboxTask.visibility = if (data == 0) View.VISIBLE else View.GONE
         }
     }
 
-    inner class ItemViewHolderDone(private val itemBinding: ItemTaskDoneBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+    inner class ItemViewHolderDone(
+        private val itemBinding: ItemTaskDoneBinding
+    ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(data: Int) {
             itemBinding.checkboxTask.visibility = if (data == 0) View.VISIBLE else View.GONE
         }

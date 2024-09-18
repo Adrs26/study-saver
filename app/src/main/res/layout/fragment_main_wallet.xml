@@ -26,26 +26,28 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="RtlSymmetry" />
 
-        <ImageView
-            android:id="@+id/overviewIcon"
+        <ImageButton
+            android:id="@+id/historyIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="24dp"
+            android:layout_marginEnd="24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/overview"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="RtlSymmetry" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/deleteIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/chart"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/overviewIcon"
+            app:layout_constraintEnd_toStartOf="@id/historyIcon"
             tools:ignore="RtlSymmetry" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -205,7 +207,7 @@
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 
-    <ImageView
+    <ImageButton
         android:id="@+id/addTaskButton"
         android:layout_width="56dp"
         android:layout_height="56dp"

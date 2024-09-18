@@ -1,4 +1,4 @@
-package com.example.studysaver.ui.main.dialogs
+package com.example.studysaver.ui.dialogs
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -14,17 +14,24 @@ import com.example.studysaver.viewmodels.MainTaskViewModel
 
 class TaskDialogFragment : DialogFragment() {
     private lateinit var binding: DialogTaskBinding
-    private lateinit var mainTaskViewModel: MainTaskViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    private val mainTaskViewModel: MainTaskViewModel by lazy {
+        ViewModelProvider(requireActivity())[MainTaskViewModel::class.java]
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = DialogTaskBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupViewModel()
         setupDialogButton()
+        setupObservers()
     }
 
     override fun onStart() {
@@ -37,9 +44,7 @@ class TaskDialogFragment : DialogFragment() {
         dialog?.setCancelable(false)
     }
 
-    private fun setupViewModel() {
-        mainTaskViewModel = ViewModelProvider(requireActivity())[MainTaskViewModel::class.java]
-
+    private fun setupObservers() {
         mainTaskViewModel.taskTitle.observe(viewLifecycleOwner) {
             binding.taskTitle.setText(it)
         }
@@ -59,9 +64,15 @@ class TaskDialogFragment : DialogFragment() {
 
     private fun setupDialogButton() {
         binding.cancelButton.setOnClickListener {
-            if (binding.taskTitle.text?.isNotEmpty() == true || binding.taskDescription.text?.isNotEmpty() == true || binding.taskDeadline.text?.isNotEmpty() == true) {
+            if (binding.taskTitle.text?.isNotEmpty() == true ||
+                binding.taskDescription.text?.isNotEmpty() == true ||
+                binding.taskDeadline.text?.isNotEmpty() == true
+                ) {
                 getTaskTitleAndDescription()
-                Toast.makeText(requireContext(), "Draft tugas berhasil disimpan", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Draft tugas berhasil disimpan",
+                    Toast.LENGTH_SHORT).show()
             }
             dismiss()
         }
@@ -69,7 +80,10 @@ class TaskDialogFragment : DialogFragment() {
             mainTaskViewModel.taskTitle.value = ""
             mainTaskViewModel.taskDescription.value = ""
             mainTaskViewModel.taskDeadline.value = ""
-            Toast.makeText(requireContext(), "Tugas berhasil disimpan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                "Tugas berhasil disimpan",
+                Toast.LENGTH_SHORT).show()
             dismiss()
         }
         binding.taskDeadline.setOnClickListener {

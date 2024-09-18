@@ -16,8 +16,16 @@ class MainWalletViewModel : ViewModel() {
     }
 
     private fun updateButtonStyles(menuId: Int) {
-        allTransactionButtonStyle.value = if (menuId == 1) Pair(R.drawable.box_hover_blue, R.color.white) else Pair(0, R.color.sky_blue)
-        incomeButtonStyle.value = if (menuId == 2) Pair(R.drawable.box_hover_blue, R.color.white) else Pair(0, R.color.sky_blue)
-        expenseButtonStyle.value = if (menuId == 3) Pair(R.drawable.box_hover_blue, R.color.white) else Pair(0, R.color.sky_blue)
+        allTransactionButtonStyle.value = getButtonStyle(menuId, 1)
+        incomeButtonStyle.value = getButtonStyle(menuId, 2)
+        expenseButtonStyle.value = getButtonStyle(menuId, 3)
+    }
+
+    private fun getButtonStyle(menuId: Int, targetMenuId: Int): Pair<Int, Int> {
+        return if (menuId == targetMenuId) {
+            Pair(R.drawable.box_hover_blue, R.color.white)
+        } else {
+            Pair(0, R.color.sky_blue)
+        }
     }
 }
