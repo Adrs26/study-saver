@@ -10,26 +10,17 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.studysaver.R
 import com.example.studysaver.adapters.TaskAdapter
 import com.example.studysaver.databinding.FragmentMainTaskBinding
 import com.example.studysaver.ui.dialogs.TaskDialogFragment
+import com.example.studysaver.utils.TaskUtil
 import com.example.studysaver.viewmodels.MainTaskViewModel
 
 class MainTaskFragment : Fragment() {
-    companion object {
-        const val MENU_UNDONE = 1
-        const val MENU_LATE = 2
-        const val MENU_DONE = 3
-    }
-
     private lateinit var binding: FragmentMainTaskBinding
-
-    private val mainTaskViewModel: MainTaskViewModel by lazy {
-        ViewModelProvider(requireActivity())[MainTaskViewModel::class.java]
-    }
-    private val taskAdapter: TaskAdapter by lazy {
-        TaskAdapter(requireContext(), mutableListOf())
-    }
+    private lateinit var mainTaskViewModel: MainTaskViewModel
+    private lateinit var taskAdapter: TaskAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,10 +34,16 @@ class MainTaskFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupViewModel()
         setupMenuButton()
         setupToolbarIcon()
         setupRecyclerView()
+        checkAndUpdateTaskStatus()
         setupObservers()
+    }
+
+    private fun setupViewModel() {
+        mainTaskViewModel = ViewModelProvider(requireActivity())[MainTaskViewModel::class.java]
     }
 
     private fun setupMenuButton() {
@@ -68,15 +65,30 @@ class MainTaskFragment : Fragment() {
         binding.deleteIcon.setOnClickListener {
             mainTaskViewModel.onDeleteTaskClicked()
         }
-
+        binding.deleteForeverIcon.setOnClickListener {
+            mainTaskViewModel.onCloseDeleteTaskClicked()
+            mainTaskViewModel.deleteTaskById(TaskUtil.taskDeleteList)
+        }
+        binding.selectAllIcon.setOnClickListener {
+            mainTaskViewModel.updateCheckedStatus(true)
+            mainTaskViewModel.deleteTaskByStatus()
+            mainTaskViewModel.onCloseDeleteTaskClicked()
+        }
         binding.closeIcon.setOnClickListener {
             mainTaskViewModel.onCloseDeleteTaskClicked()
+            mainTaskViewModel.updateCheckedStatus(false)
+            TaskUtil.taskDeleteList.clear()
         }
     }
 
     private fun setupRecyclerView() {
+        taskAdapter = TaskAdapter(requireContext(), mutableListOf())
         binding.taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.taskRecyclerView.adapter = taskAdapter
+    }
+
+    private fun checkAndUpdateTaskStatus() {
+        mainTaskViewModel.checkAndUpdateTaskStatus()
     }
 
     private fun showPopupAddTask() {
@@ -86,10 +98,14 @@ class MainTaskFragment : Fragment() {
 
     private fun setupObservers() {
         mainTaskViewModel.menuId.observe(viewLifecycleOwner) {
-            taskAdapter.updateData(
-                mainTaskViewModel.getTaskList(it),
-                mainTaskViewModel.getViewType(it)
-            )
+            mainTaskViewModel.switchTaskSource(it)
+            taskAdapter.updateDataView(mainTaskViewModel.getViewType(it))
+
+            when (it) {
+                1 -> binding.emptyTaskTextView.text = resources.getString(R.string.empty_undone_task)
+                2 -> binding.emptyTaskTextView.text = resources.getString(R.string.empty_late_task)
+                3 -> binding.emptyTaskTextView.text = resources.getString(R.string.empty_done_task)
+            }
         }
 
         mainTaskViewModel.undoneButtonStyle.observe(viewLifecycleOwner) { (background, textColor) ->
@@ -102,11 +118,33 @@ class MainTaskFragment : Fragment() {
             setupButtonStyle(binding.doneButton, background, textColor)
         }
 
+        mainTaskViewModel.undoneTaskCount.observe(viewLifecycleOwner) {
+            binding.undoneTaskCount.text = it.toString()
+        }
+        mainTaskViewModel.lateTaskCount.observe(viewLifecycleOwner) {
+            binding.lateTaskCount.text = it.toString()
+        }
+        mainTaskViewModel.doneTaskCount.observe(viewLifecycleOwner) {
+            binding.doneTaskCount.text = it.toString()
+        }
+
+        mainTaskViewModel.tasks.observe(viewLifecycleOwner) {
+            taskAdapter.updateDataItem(it)
+
+            if (it.isEmpty()) {
+                binding.taskRecyclerView.visibility = View.GONE
+                binding.emptyTaskTextView.visibility = View.VISIBLE
+            } else {
+                binding.taskRecyclerView.visibility = View.VISIBLE
+                binding.emptyTaskTextView.visibility = View.GONE
+            }
+        }
+
         mainTaskViewModel.showDeleteTask.observe(viewLifecycleOwner) {
             if (it) {
-                updateDeleteTaskView(View.VISIBLE, View.GONE, 0)
+                updateDeleteTaskView(View.VISIBLE, View.GONE, true)
             }  else {
-                updateDeleteTaskView(View.GONE, View.VISIBLE, 1)
+                updateDeleteTaskView(View.GONE, View.VISIBLE, false)
             }
         }
     }
@@ -123,10 +161,10 @@ class MainTaskFragment : Fragment() {
     private fun updateDeleteTaskView(
         toolbarIconVisibility: Int,
         taskActionVisibility: Int,
-        listStatus: Int
+        readyToDeleteStatus: Boolean
     ) {
         updateViewVisibilityForDelete(toolbarIconVisibility, taskActionVisibility)
-        mainTaskViewModel.changeTaskList(listStatus)
+        mainTaskViewModel.updateReadyToDeleteStatus(readyToDeleteStatus)
         taskAdapter.notifyDataSetChanged()
     }
 
@@ -151,5 +189,11 @@ class MainTaskFragment : Fragment() {
         views.forEach { (view, visibility) ->
             view.visibility = visibility
         }
+    }
+
+    companion object {
+        const val MENU_UNDONE = 1
+        const val MENU_LATE = 2
+        const val MENU_DONE = 3
     }
 }

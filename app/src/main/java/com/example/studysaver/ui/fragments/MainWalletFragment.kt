@@ -14,17 +14,8 @@ import com.example.studysaver.ui.HistoryActivity
 import com.example.studysaver.viewmodels.MainWalletViewModel
 
 class MainWalletFragment : Fragment() {
-    companion object {
-        const val MENU_ALL_TRANSACTION = 1
-        const val MENU_INCOME = 2
-        const val MENU_EXPENSE = 3
-    }
-
     private lateinit var binding: FragmentMainWalletBinding
-
-    private val mainWalletViewModel: MainWalletViewModel by lazy {
-        ViewModelProvider(requireActivity())[MainWalletViewModel::class.java]
-    }
+    private lateinit var mainWalletViewModel: MainWalletViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,9 +29,14 @@ class MainWalletFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupViewModel()
         setupMenuButton()
         setupToolbarIcon()
         setupObservers()
+    }
+
+    private fun setupViewModel() {
+        mainWalletViewModel = ViewModelProvider(requireActivity())[MainWalletViewModel::class.java]
     }
 
     private fun setupMenuButton() {
@@ -79,5 +75,11 @@ class MainWalletFragment : Fragment() {
             background
         )
         button.setTextColor(ContextCompat.getColor(requireContext(), textColor))
+    }
+
+    companion object {
+        const val MENU_ALL_TRANSACTION = 1
+        const val MENU_INCOME = 2
+        const val MENU_EXPENSE = 3
     }
 }

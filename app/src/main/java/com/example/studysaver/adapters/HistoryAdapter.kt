@@ -1,13 +1,11 @@
 package com.example.studysaver.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studysaver.databinding.ItemHistoryBinding
 
 class HistoryAdapter(
-    private val context: Context,
     private val historyItems: List<Int>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

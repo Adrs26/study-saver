@@ -152,12 +152,24 @@
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
                     android:background="@drawable/blue_button_rounded_corner"
-                    android:text="Tambah"
+                    android:text="Simpan"
                     android:textSize="14sp"
                     android:textColor="@color/white"
                     android:fontFamily="@font/lato_bold"
                     android:textAllCaps="false"/>
             </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/finishButton"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/grey_button_rounded_corner"
+                android:text="Selesaikan"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/lato_bold"
+                android:textAllCaps="false"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </ScrollView>

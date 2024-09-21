@@ -16,13 +16,9 @@ import com.example.studysaver.viewmodels.MainViewModel
 
 class MainActivity: AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var mainViewModel: MainViewModel
+    private lateinit var mainTaskViewModel: MainTaskViewModel
 
-    private val mainViewModel: MainViewModel by lazy {
-        ViewModelProvider(this)[MainViewModel::class.java]
-    }
-    private val mainTaskViewModel: MainTaskViewModel by lazy {
-        ViewModelProvider(this)[MainTaskViewModel::class.java]
-    }
     private val homeFragment by lazy { MainHomeFragment() }
     private val taskFragment by lazy { MainTaskFragment() }
     private val walletFragment by lazy { MainWalletFragment() }
@@ -32,6 +28,7 @@ class MainActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setupViewBinding()
+        setupViewModel()
         setupBottomNavigation()
         setupOnBackPressed()
         setupObservers()
@@ -40,6 +37,11 @@ class MainActivity: AppCompatActivity() {
     private fun setupViewBinding() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    private fun setupViewModel() {
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        mainTaskViewModel = ViewModelProvider(this)[MainTaskViewModel::class.java]
     }
 
     private fun setupBottomNavigation() {
