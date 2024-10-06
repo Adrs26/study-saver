@@ -47,7 +47,7 @@ interface TaskDao {
     @Query("UPDATE task SET status = 'Done', dateFinished = :dateFinished WHERE id = :taskId")
     suspend fun updateTaskStatus(taskId: Long, dateFinished: String)
 
-    @Query("UPDATE task SET status = 'Late' WHERE deadlineTimestamp < :currentTime")
+    @Query("UPDATE task SET status = 'Late' WHERE deadlineTimestamp < :currentTime AND status = 'Undone'")
     suspend fun updateTaskStatusIfDeadlinePassed(currentTime: Long)
 
     @Query("DELETE FROM task WHERE id = :taskId")

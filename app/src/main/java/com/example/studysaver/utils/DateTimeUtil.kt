@@ -10,7 +10,7 @@ import java.util.Date
 import java.util.Locale
 
 object DateTimeUtil {
-    fun getDayFromDate(dateString: String): String {
+    private fun getDayFromDate(dateString: String): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val date = LocalDate.parse(
                 dateString,
@@ -31,7 +31,7 @@ object DateTimeUtil {
         }
     }
 
-    fun convertDateToIndonesianFormat(dateString: String): String {
+    private fun convertDateToIndonesianFormat(dateString: String): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val date = LocalDate.parse(
                 dateString,
@@ -51,11 +51,6 @@ object DateTimeUtil {
         }
     }
 
-    fun convertToTimestamp(dateString: String): Long {
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return formatter.parse(dateString)?.time ?: 0L
-    }
-
     private fun getTodayDate(): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val currentDate = LocalDate.now()
@@ -70,5 +65,10 @@ object DateTimeUtil {
         val indonesianDay = getDayFromDate(dateString)
         val indonesianDate = convertDateToIndonesianFormat(dateString)
         return "$indonesianDay, $indonesianDate"
+    }
+
+    fun convertToTimestamp(dateString: String): Long {
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return formatter.parse(dateString)?.time ?: 0L
     }
 }

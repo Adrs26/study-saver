@@ -5,15 +5,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studysaver.databases.entities.Task
 import com.example.studysaver.databinding.ItemTaskDoneBinding
 import com.example.studysaver.databinding.ItemTaskLateBinding
 import com.example.studysaver.databinding.ItemTaskUndoneBinding
-import com.example.studysaver.ui.dialogs.EditTaskDialogFragment
-import com.example.studysaver.ui.dialogs.TaskDialogFragment
+import com.example.studysaver.ui.dialogs.task.EditTaskDialogFragment
 import com.example.studysaver.utils.TaskUtil
 
 class TaskAdapter(
@@ -75,11 +73,9 @@ class TaskAdapter(
     ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(data: Task) {
             itemBinding.checkboxTask.visibility = if (data.isReadyToDelete) View.VISIBLE else View.GONE
-
             itemBinding.taskTitle.text = data.title
             itemBinding.taskDescription.text = data.description
             itemBinding.taskDeadline.text = data.deadline
-
             itemBinding.checkboxTask.isChecked = data.isChecked
 
             itemBinding.checkboxTask.setOnCheckedChangeListener {_, isChecked ->
@@ -92,8 +88,9 @@ class TaskAdapter(
 
             itemBinding.rootContainer.setOnClickListener {
                 TaskUtil.taskId = data.id
+                TaskUtil.taskDeadline = data.deadlineTimestamp
                 val dialog = EditTaskDialogFragment()
-                dialog.show((context as FragmentActivity).supportFragmentManager, "ALERT_EDIT_DIALOG_FRAGMENT")
+                dialog.show((context as FragmentActivity).supportFragmentManager, "EDIT_TASK_DIALOG")
             }
         }
     }
@@ -103,7 +100,6 @@ class TaskAdapter(
     ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(data: Task) {
             itemBinding.checkboxTask.visibility = if (data.isReadyToDelete) View.VISIBLE else View.GONE
-
             itemBinding.taskTitle.text = data.title
             itemBinding.taskDescription.text = data.description
             itemBinding.taskDeadline.text = data.deadline
@@ -119,8 +115,9 @@ class TaskAdapter(
 
             itemBinding.rootContainer.setOnClickListener {
                 TaskUtil.taskId = data.id
+                TaskUtil.taskDeadline = data.deadlineTimestamp
                 val dialog = EditTaskDialogFragment()
-                dialog.show((context as FragmentActivity).supportFragmentManager, "ALERT_EDIT_DIALOG_FRAGMENT")
+                dialog.show((context as FragmentActivity).supportFragmentManager, "EDIT_TASK_DIALOG")
             }
         }
     }
@@ -130,7 +127,6 @@ class TaskAdapter(
     ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(data: Task) {
             itemBinding.checkboxTask.visibility = if (data.isReadyToDelete) View.VISIBLE else View.GONE
-
             itemBinding.taskTitle.text = data.title
             itemBinding.taskDescription.text = data.description
             itemBinding.taskDateCompleted.text = data.dateFinished

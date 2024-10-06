@@ -1,4 +1,4 @@
-package com.example.studysaver.ui.dialogs
+package com.example.studysaver.ui.dialogs.task
 
 import android.content.DialogInterface
 import android.graphics.Color
@@ -11,11 +11,12 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.studysaver.databases.entities.Task
-import com.example.studysaver.databinding.DialogTaskBinding
+import com.example.studysaver.databinding.DialogAddTaskBinding
+import com.example.studysaver.ui.dialogs.DatePickerDialogFragment
 import com.example.studysaver.viewmodels.MainTaskViewModel
 
-class TaskDialogFragment : DialogFragment() {
-    private lateinit var binding: DialogTaskBinding
+class AddTaskDialogFragment : DialogFragment() {
+    private lateinit var binding: DialogAddTaskBinding
     private lateinit var mainTaskViewModel: MainTaskViewModel
 
     override fun onCreateView(
@@ -23,7 +24,7 @@ class TaskDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DialogTaskBinding.inflate(inflater, container, false)
+        binding = DialogAddTaskBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -64,30 +65,13 @@ class TaskDialogFragment : DialogFragment() {
                 Toast.makeText(
                     requireContext(),
                     "Draft tugas berhasil disimpan",
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             dismiss()
         }
         binding.saveButton.setOnClickListener {
-            Toast.makeText(
-                requireContext(),
-                "Tugas berhasil disimpan",
-                Toast.LENGTH_SHORT).show()
-            mainTaskViewModel.insert(
-                Task(
-                    title = binding.taskTitle.text.toString(),
-                    description = binding.taskDescription.text.toString(),
-                    deadline = binding.taskDeadline.text.toString(),
-                    deadlineTimestamp = mainTaskViewModel.taskDeadline.value ?: 0L,
-                    status = "Undone",
-                    isChecked = false,
-                    isReadyToDelete = false,
-                    dateFinished = "",
-                    dateFinishedTimestamp = 0
-                )
-            )
-            clearDataDialog()
-            dismiss()
+            addNewTask()
         }
         binding.taskDeadline.setOnClickListener {
             showDatePickerDialog()
@@ -98,6 +82,47 @@ class TaskDialogFragment : DialogFragment() {
         val title = binding.taskTitle.text.toString()
         val description = binding.taskDescription.text.toString()
         mainTaskViewModel.setTaskTitleAndDescription(title, description)
+    }
+
+    private fun addNewTask() {
+        when {
+            binding.taskTitle.text?.isEmpty() == true -> {
+                Toast.makeText(
+                    requireContext(),
+                    "Harap beri judul tugas",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            binding.taskDeadline.text?.isEmpty() == true -> {
+                Toast.makeText(
+                    requireContext(),
+                    "Harap beri deadline tugas",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else -> {
+                mainTaskViewModel.insert(
+                    Task(
+                        title = binding.taskTitle.text.toString(),
+                        description = binding.taskDescription.text.toString(),
+                        deadline = binding.taskDeadline.text.toString(),
+                        deadlineTimestamp = mainTaskViewModel.taskDeadline.value ?: 0L,
+                        status = "Undone",
+                        isChecked = false,
+                        isReadyToDelete = false,
+                        dateFinished = "",
+                        dateFinishedTimestamp = 0
+                    )
+                )
+                clearDataDialog()
+                dismiss()
+                Toast.makeText(
+                    requireContext(),
+                    "Tugas berhasil ditambah",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun clearDataDialog() {

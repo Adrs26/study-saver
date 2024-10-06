@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.studysaver.R
 import com.example.studysaver.adapters.TaskAdapter
 import com.example.studysaver.databinding.FragmentMainTaskBinding
-import com.example.studysaver.ui.dialogs.TaskDialogFragment
+import com.example.studysaver.ui.dialogs.task.DeleteAllTaskConfirmationDialogFragment
+import com.example.studysaver.ui.dialogs.task.DeleteTaskConfirmationDialogFragment
+import com.example.studysaver.ui.dialogs.task.AddTaskDialogFragment
 import com.example.studysaver.utils.TaskUtil
 import com.example.studysaver.viewmodels.MainTaskViewModel
 
@@ -66,13 +69,19 @@ class MainTaskFragment : Fragment() {
             mainTaskViewModel.onDeleteTaskClicked()
         }
         binding.deleteForeverIcon.setOnClickListener {
-            mainTaskViewModel.onCloseDeleteTaskClicked()
-            mainTaskViewModel.deleteTaskById(TaskUtil.taskDeleteList)
+            if (TaskUtil.taskDeleteList.isEmpty()) {
+                Toast.makeText(
+                    requireContext(),
+                    "Harap pilih tugas yang ingin dihapus",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                showPopupDeleteTaskConfirmation()
+            }
         }
         binding.selectAllIcon.setOnClickListener {
             mainTaskViewModel.updateCheckedStatus(true)
-            mainTaskViewModel.deleteTaskByStatus()
-            mainTaskViewModel.onCloseDeleteTaskClicked()
+            showPopupDeleteAllTaskConfirmation()
         }
         binding.closeIcon.setOnClickListener {
             mainTaskViewModel.onCloseDeleteTaskClicked()
@@ -92,8 +101,18 @@ class MainTaskFragment : Fragment() {
     }
 
     private fun showPopupAddTask() {
-        val taskDialogFragment = TaskDialogFragment()
-        taskDialogFragment.show(parentFragmentManager, "ALERT_DIALOG_FRAGMENT")
+        val addTaskDialogFragment = AddTaskDialogFragment()
+        addTaskDialogFragment.show(parentFragmentManager, "ADD_TASK_DIALOG")
+    }
+
+    private fun showPopupDeleteTaskConfirmation() {
+        val deleteTaskConfirmationDialogFragment = DeleteTaskConfirmationDialogFragment()
+        deleteTaskConfirmationDialogFragment.show(parentFragmentManager, "DELETE_TASK_DIALOG")
+    }
+
+    private fun showPopupDeleteAllTaskConfirmation() {
+        val deleteAllTaskConfirmationDialogFragment = DeleteAllTaskConfirmationDialogFragment()
+        deleteAllTaskConfirmationDialogFragment.show(parentFragmentManager, "DELETE_ALL_TASK_DIALOG")
     }
 
     private fun setupObservers() {

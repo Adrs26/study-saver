@@ -30,29 +30,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:paddingHorizontal="24dp"
-                android:text="Teknik Mikroprosesor dan Antarmuka"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 android:fontFamily="@font/lato_bold"
-                android:maxLines="2" />
+                android:maxLines="2"
+                tools:text="Teknik Mikroprosesor dan Antarmuka"/>
 
             <TextView
                 android:id="@+id/taskDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="24dp"
-                android:text="Membuat rangkuman sistem mikroprosesor"
                 android:textSize="12sp"
                 android:textColor="@color/black"
                 android:fontFamily="@font/lato_regular"
-                android:maxLines="2"/>
+                android:maxLines="2"
+                tools:text="Membuat rangkuman sistem mikroprosesor"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:paddingHorizontal="24dp"
-                android:text="Diselesaikan pada"
+                android:text="@string/completed_on"
                 android:textSize="12sp"
                 android:textColor="@color/black"
                 android:fontFamily="@font/lato_bold" />
@@ -63,10 +63,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:paddingHorizontal="24dp"
-                android:text="Minggu, 1 September 2024"
                 android:textSize="12sp"
                 android:textColor="@color/green"
-                android:fontFamily="@font/lato_bold" />
+                android:fontFamily="@font/lato_bold"
+                tools:text="Minggu, 1 September 2024"/>
         </LinearLayout>
     </LinearLayout>
 

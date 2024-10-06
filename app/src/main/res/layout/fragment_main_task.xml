@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Task"
+            android:text="@string/task"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:fontFamily="@font/lato_bold"
@@ -34,6 +34,7 @@
             android:layout_marginEnd="24dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/delete"
+            android:contentDescription="@string/delete_icon"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,6 +47,7 @@
             android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/delete_forever"
+            android:contentDescription="@string/delete_forever_icon"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -59,6 +61,7 @@
             android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/select_all"
+            android:contentDescription="@string/select_all_icon"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -72,6 +75,7 @@
             android:layout_marginEnd="24dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/close"
+            android:contentDescription="@string/close_icon"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -98,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="Progress Tugas Kamu"
+                android:text="@string/your_task_progress"
                 android:textSize="14sp"
                 android:textColor="@color/black"
                 android:fontFamily="@font/lato_bold" />
@@ -106,7 +110,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -120,7 +125,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Belum Selesai"
+                        android:text="@string/undone"
                         android:textSize="12sp"
                         android:textColor="@color/blue"
                         android:fontFamily="@font/lato_bold"
@@ -131,11 +136,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="0"
                         android:textSize="16sp"
                         android:textColor="@color/blue"
                         android:fontFamily="@font/lato_bold"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center"
+                        tools:text="0"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -150,7 +155,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Lewat Deadline"
+                        android:text="@string/late"
                         android:textSize="11sp"
                         android:textColor="@color/red_maroon"
                         android:fontFamily="@font/lato_bold"
@@ -161,11 +166,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="0"
                         android:textSize="16sp"
                         android:textColor="@color/red_maroon"
                         android:fontFamily="@font/lato_bold"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center"
+                        tools:text="0"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -180,7 +185,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Selesai"
+                        android:text="@string/done"
                         android:textSize="12sp"
                         android:textColor="@color/green"
                         android:fontFamily="@font/lato_bold"
@@ -191,11 +196,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="0"
                         android:textSize="16sp"
                         android:textColor="@color/green"
                         android:fontFamily="@font/lato_bold"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center"
+                        tools:text="0"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -226,7 +231,7 @@
                 android:layout_weight="1"
                 android:padding="8dp"
                 android:background="@drawable/box_hover_blue"
-                android:text="Belum Selesai"
+                android:text="@string/done"
                 android:textSize="11sp"
                 android:textColor="@color/white"
                 android:textAlignment="center"
@@ -238,7 +243,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="Lewat Deadline"
+                android:text="@string/late"
                 android:textSize="11sp"
                 android:textColor="@color/sky_blue"
                 android:textAlignment="center"
@@ -250,7 +255,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="Selesai"
+                android:text="@string/done"
                 android:textSize="11sp"
                 android:textColor="@color/sky_blue"
                 android:textAlignment="center"
@@ -263,7 +268,7 @@
                 android:layout_weight="1"
                 android:padding="8dp"
                 android:background="@drawable/box_hover_blue"
-                android:text="Pilih tugas yang ingin dihapus"
+                android:text="@string/choose_task_want_to_delete"
                 android:textSize="11sp"
                 android:textColor="@color/white"
                 android:textAlignment="center"
@@ -301,6 +306,7 @@
         android:padding="16dp"
         android:background="@drawable/blue_button_rounded"
         android:src="@drawable/plus"
+        android:contentDescription="@string/add_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

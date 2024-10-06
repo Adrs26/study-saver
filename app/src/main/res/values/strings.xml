@@ -1,6 +1,31 @@
 <resources>
     <string name="app_name">Study Saver</string>
+    <string name="cancel">Batal</string>
+    <string name="add">Tambah</string>
+    <string name="calendar_icon">Calendar Icon</string>
+    <string name="save">Simpan</string>
+    <string name="no">Tidak</string>
+    <string name="yes">Ya</string>
+    <string name="add_button">Add Button</string>
+    <string name="close_icon">Close Icon</string>
+    <string name="select_all_icon">Select All Icon</string>
+    <string name="delete_forever_icon">Delete Forever Icon</string>
+    <string name="delete_icon">Delete Icon</string>
+
+    <string name="task">Task</string>
+    <string name="your_task_progress">Progress Tugas Kamu</string>
+    <string name="undone">Belum Selesai</string>
+    <string name="late">Lewat Deadline</string>
+    <string name="done">Selesai</string>
+    <string name="choose_task_want_to_delete">Pilih tugas yang ingin dihapus</string>
     <string name="empty_undone_task">Tidak ada tugas yang belum selesai</string>
     <string name="empty_late_task">Tidak ada tugas yang terlambat</string>
     <string name="empty_done_task">Tidak ada tugas yang selesai</string>
+    <string name="delete_task_confirmation">Anda yakin ingin menghapus tugas tersebut?</string>
+    <string name="delete_all_task_confirmation">Anda yakin ingin menghapus semua tugas?</string>
+    <string name="task_title">Judul Tugas</string>
+    <string name="task_description">Deskripsi Tugas</string>
+    <string name="task_deadline">Deadline Tugas</string>
+    <string name="finish">Selesaikan</string>
+    <string name="completed_on">Diselesaikan pada</string>
 </resources>
